@@ -15,26 +15,42 @@ class CryptoApp {
 		let tableBody = document.getElementById("table-body");
 		Object.keys(this.coinData).forEach(coinKey => {
 			let coin = this.coinData[coinKey];
-			let coinTableEntry = document.createElement("tr");
-			coinTableEntry.id = coin.Id;
+			let coinTableEntry = document.getElementById(coin.Id);
 
-			let image = document.createElement("img");
-			image.src = "https://www.cryptocompare.com" + coin.ImageUrl;
-			image.classList.add("coin-image");
+			if(coinTableEntry) {
 
-			let name = document.createElement("td");
-			name.innerText = coin.FullName;
+				let price = document.getElementById(coin.Id + "-price");
+				if(coin.Price != price.innerText) {
+					if(coin.Price > price.innerText) {
+						price.className = "up flash-up";
+						setTimeout(() => {price.classList.remove("flash-up"), 500});
+					} else {
+						price.className = "up flash-down";
+						setTimeout(() => {price.classList.remove("flash-down"), 500});
+					}
+				}
+				price.innerText = coin.Price;
+			} else {
+				coinTableEntry = document.createElement("tr");
+				coinTableEntry.id = coin.Id;
 
-			let price = document.createElement("td");
-			price.id = coin.Id + "-price";
-			console.log(coin.Price);
-			price.innerText = coin.Price;
+				let image = document.createElement("img");
+				image.src = "https://www.cryptocompare.com" + coin.ImageUrl;
+				image.classList.add("coin-image");
 
-			coinTableEntry.appendChild(image);
-			coinTableEntry.appendChild(name);
-			coinTableEntry.appendChild(price);
+				let name = document.createElement("td");
+				name.innerText = coin.FullName;
 
-			tableBody.appendChild(coinTableEntry);
+				let price = document.createElement("td");
+				price.id = coin.Id + "-price";
+				price.innerText = coin.Price;
+
+				coinTableEntry.appendChild(image);
+				coinTableEntry.appendChild(name);
+				coinTableEntry.appendChild(price);
+
+				tableBody.appendChild(coinTableEntry);
+			}
 		});
 	}
 
@@ -58,6 +74,7 @@ class CryptoApp {
 			});
 			console.log(this.coinData);
 			this.updateCoinDataPrices();
+			setInterval(this.updateCoinDataPrices.bind(this), 6000);
 		});
 	}
 
