@@ -11,6 +11,33 @@ class CryptoApp {
 		this.coinData = {};
 	}
 
+	updateCoinTable() {
+		let tableBody = document.getElementById("table-body");
+		Object.keys(this.coinData).forEach(coinKey => {
+			let coin = this.coinData[coinKey];
+			let coinTableEntry = document.createElement("tr");
+			coinTableEntry.id = coin.Id;
+
+			let image = document.createElement("img");
+			image.src = "https://www.cryptocompare.com" + coin.ImageUrl;
+			image.classList.add("coin-image");
+
+			let name = document.createElement("td");
+			name.innerText = coin.FullName;
+
+			let price = document.createElement("td");
+			price.id = coin.Id + "-price";
+			console.log(coin.Price);
+			price.innerText = coin.Price;
+
+			coinTableEntry.appendChild(image);
+			coinTableEntry.appendChild(name);
+			coinTableEntry.appendChild(price);
+
+			tableBody.appendChild(coinTableEntry);
+		});
+	}
+
 	// API - Application Program Interface
 	makeAPIcall(endPoint, callback) {
 		let xhttp = new XMLHttpRequest();
@@ -42,6 +69,7 @@ class CryptoApp {
 				Object.keys(coinPrices).forEach(coinPriceKey => {
 					this.coinData[coinPriceKey].Price = coinPrices[coinPriceKey].CAD;
 				});
+				this.updateCoinTable();
 			});
 	}
 }
