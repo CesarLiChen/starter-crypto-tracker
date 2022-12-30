@@ -18,18 +18,18 @@ class CryptoApp {
 			let coinTableEntry = document.getElementById(coin.Id);
 
 			if(coinTableEntry) {
-
 				let price = document.getElementById(coin.Id + "-price");
 				if(coin.Price != price.innerText) {
 					if(coin.Price > price.innerText) {
 						price.className = "up flash-up";
 						setTimeout(() => {price.classList.remove("flash-up"), 500});
 					} else {
-						price.className = "up flash-down";
+						price.className = "down flash-down";
 						setTimeout(() => {price.classList.remove("flash-down"), 500});
 					}
 				}
 				price.innerText = coin.Price;
+				
 			} else {
 				coinTableEntry = document.createElement("tr");
 				coinTableEntry.id = coin.Id;
