@@ -26,7 +26,23 @@ class CryptoApp {
 	start() {
 		this.makeAPIcall(COIN_INFO_ENDPOINT, coinData => {
 			console.log(coinData);
+			coinData.Data.forEach(coin => {
+				this.coinData[coin.CoinInfo.Name] = coin.CoinInfo;
+			});
+			console.log(this.coinData);
+			this.updateCoinDataPrices();
 		});
+	}
+
+	updateCoinDataPrices() {
+		this.makeAPIcall(
+			PRICE_INFO_ENDPOINT + Object.keys(this.coinData).join(","),
+			coinPrices => {
+				console.log(coinPrices);
+				Object.keys(coinPrices).forEach(coinPriceKey => {
+					this.coinData[coinPriceKey].Price = coinPrices[coinPriceKey].CAD;
+				});
+			});
 	}
 }
 
